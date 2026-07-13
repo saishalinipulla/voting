@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Results · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card wide">
+    <p class="eyebrow">Election Results <span class="status-pill status-{{ status }}">{{ status }}</span></p>
+    <h1 class="card-title">Live Tally</h1>
+
+    {% if winners %}
+    <div class="winner-box">
+      <p class="eyebrow">{{ 'It\'s a Tie' if winners|length > 1 else 'Leading Candidate' }}</p>
+      <h2>{{ winners|map(attribute='name')|join(' & ') }}</h2>
+      <p>{{ winners|map(attribute='position')|unique|join(', ') }} with {{ max_votes }} vote{{ 's' if max_votes != 1 else '' }}</p>
+      <p class="congrats">Congratulations! 🎊</p>
+    </div>
+    {% else %}
+      <div class="empty-state">No votes have been cast yet.</div>
+    {% endif %}
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num">{{ candidates|length }}</div><div class="stat-label">Registered Candidates</div></div>
+      <div class="stat-box"><div class="stat-num">{{ total_voters }}</div><div class="stat-label">Registered Voters</div></div>
+      <div class="stat-box"><div class="stat-num">{{ total_voted }}</div><div class="stat-label">Votes Cast</div></div>
+      <div class="stat-box"><div class="stat-num">{{ ((total_voted / total_voters * 100) | round | int) if total_voters else 0 }}%</div><div class="stat-label">Turnout</div></div>
+    </div>
+
+    <p class="eyebrow">Vote Breakdown</p>
+    {% for c in candidates %}
+      {% set pct = ((c.votes / total_votes_cast * 100) | round | int) if total_votes_cast else 0 %}
+      <div class="result-row {{ 'winner' if c.votes == max_votes and max_votes > 0 else '' }}">
+        <div class="result-row-head">
+          <span class="name">{{ c.name }} <small>({{ c.position }} · {{ c.symbol }})</small></span>
+          <span>{{ c.votes }} votes · {{ pct }}%</span>
+        </div>
+        <div class="result-bar-track"><div class="result-bar-fill" style="width:{{ pct }}%;"></div></div>
+      </div>
+    {% endfor %}
+
+    {% if not candidates %}
+      <div class="empty-state">No candidates registered yet.</div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

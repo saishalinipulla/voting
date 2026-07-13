@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}Candidates · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card wide admin-card">
+    <p class="eyebrow">Candidate Registration</p>
+    <h1 class="card-title">Register Leaders &amp; CRs</h1>
+    <p class="card-desc">Register candidates separately by position.</p>
+
+    <form method="POST" action="{{ url_for('admin_candidates') }}" class="candidate-form">
+      <div class="field">
+        <label>Candidate Name</label>
+        <input name="name" required />
+      </div>
+      <div class="field">
+        <label>Symbol</label>
+        <input name="symbol" placeholder="e.g. Lamp" required />
+      </div>
+      <div class="field">
+        <label>Position</label>
+        <select name="position">
+          <option value="Leader">Leader</option>
+          <option value="CR">Class Representative (CR)</option>
+        </select>
+      </div>
+      <button type="submit" class="btn btn-gold">Add Candidate</button>
+    </form>
+
+    <div class="two-col">
+      <div>
+        <p class="eyebrow" style="margin-top:24px;">Leader Candidates</p>
+        <div class="table-wrap">
+          <table class="ballot-table">
+            <thead><tr><th>Name</th><th>Symbol</th><th>Votes</th><th></th></tr></thead>
+            <tbody>
+              {% for c in leaders %}
+                <tr>
+                  <td>{{ c.name }}</td><td>{{ c.symbol }}</td><td>{{ c.votes }}</td>
+                  <td>
+                    <form method="POST" action="{{ url_for('delete_candidate', candidate_id=c.id) }}">
+                      <button class="btn-ghost" type="submit">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              {% else %}
+                <tr><td colspan="4"><div class="empty-state">No leader candidates yet.</div></td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div>
+        <p class="eyebrow" style="margin-top:24px;">CR Candidates</p>
+        <div class="table-wrap">
+          <table class="ballot-table">
+            <thead><tr><th>Name</th><th>Symbol</th><th>Votes</th><th></th></tr></thead>
+            <tbody>
+              {% for c in crs %}
+                <tr>
+                  <td>{{ c.name }}</td><td>{{ c.symbol }}</td><td>{{ c.votes }}</td>
+                  <td>
+                    <form method="POST" action="{{ url_for('delete_candidate', candidate_id=c.id) }}">
+                      <button class="btn-ghost" type="submit">Remove</button>
+                    </form>
+                  </td>
+                </tr>
+              {% else %}
+                <tr><td colspan="4"><div class="empty-state">No CR candidates yet.</div></td></tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

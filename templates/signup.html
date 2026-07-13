@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Sign Up · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card">
+    <p class="eyebrow">Voter Registration</p>
+    <h1 class="card-title">Create Your Account</h1>
+    <p class="card-desc">
+      Choose a PIN and password. After signing up, you'll verify an OTP,
+      then wait for admin approval before you can vote.
+    </p>
+
+    <form method="POST" action="{{ url_for('signup') }}">
+      <div class="field">
+        <label for="name">Full Name</label>
+        <input id="name" name="name" required placeholder="e.g. Aditi Rao" />
+      </div>
+      <div class="field">
+        <label for="email">Email Address</label>
+        <input id="email" name="email" type="email" required placeholder="e.g. aditi@example.com" />
+      </div>
+      <div class="field">
+        <label for="pin">Choose a PIN</label>
+        <input id="pin" name="pin" required placeholder="e.g. 1024" class="mono" />
+      </div>
+      <div class="field">
+        <label for="password">Create a Password</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+      <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
+    </form>
+
+    <p class="fine-links">
+      Already registered? <a href="{{ url_for('login') }}">Log in</a>
+    </p>
+    <p class="fine-links"><a href="{{ url_for('home') }}">&larr; Back to home</a></p>
+  </div>
+</div>
+{% endblock %}

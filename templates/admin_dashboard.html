@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Admin Dashboard · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card wide admin-card">
+    <p class="eyebrow">Election Officer</p>
+    <h1 class="card-title">Admin Dashboard</h1>
+
+    <div class="stat-grid">
+      <div class="stat-box"><div class="stat-num">{{ pending_count }}</div><div class="stat-label">Pending Requests</div></div>
+      <div class="stat-box"><div class="stat-num">{{ approved_count }}</div><div class="stat-label">Approved Voters</div></div>
+      <div class="stat-box"><div class="stat-num">{{ rejected_count }}</div><div class="stat-label">Rejected</div></div>
+      <div class="stat-box"><div class="stat-num">{{ candidate_count }}</div><div class="stat-label">Candidates</div></div>
+    </div>
+
+    <p class="card-desc">
+      Voting status: <span class="status-pill status-{{ election_status }}">{{ election_status }}</span>
+    </p>
+
+    <div class="admin-quicklinks">
+      <a href="{{ url_for('admin_users') }}" class="btn btn-admin">Review Voter Requests</a>
+      <a href="{{ url_for('admin_candidates') }}" class="btn btn-gold">Register Candidates</a>
+      <a href="{{ url_for('admin_schedule') }}" class="btn btn-outline">Set Voting Schedule</a>
+    </div>
+  </div>
+</div>
+{% endblock %}

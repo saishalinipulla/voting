@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Voter Requests · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card wide admin-card">
+    <p class="eyebrow">Voter Verification</p>
+    <h1 class="card-title">Registration Requests</h1>
+
+    <p class="eyebrow" style="margin-top:20px;">Pending ({{ pending|length }})</p>
+    {% if not pending %}
+      <div class="empty-state">No pending requests.</div>
+    {% endif %}
+    {% for u in pending %}
+      <div class="request-row">
+        <div>
+          <div class="candidate-name">{{ u.name }}</div>
+          <div class="candidate-party mono">PIN: {{ u.pin }} · {{ u.email }}</div>
+        </div>
+        <div class="request-actions">
+          <form method="POST" action="{{ url_for('accept_user', user_id=u.id) }}">
+            <button type="submit" class="btn btn-success">Accept</button>
+          </form>
+          <form method="POST" action="{{ url_for('reject_user', user_id=u.id) }}" class="reject-form">
+            <input type="text" name="reason" placeholder="Reason (optional)" />
+            <button type="submit" class="btn btn-danger">Reject</button>
+          </form>
+        </div>
+      </div>
+    {% endfor %}
+
+    <p class="eyebrow" style="margin-top:32px;">Approved ({{ approved|length }})</p>
+    <div class="table-wrap">
+      <table class="ballot-table">
+        <thead><tr><th>Name</th><th>Email</th><th>PIN</th><th>Voted?</th></tr></thead>
+        <tbody>
+          {% for u in approved %}
+            <tr><td>{{ u.name }}</td><td>{{ u.email }}</td><td class="mono">{{ u.pin }}</td><td>{{ 'Yes' if u.has_voted else 'No' }}</td></tr>
+          {% else %}
+            <tr><td colspan="4"><div class="empty-state">No approved voters yet.</div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="eyebrow" style="margin-top:32px;">Rejected ({{ rejected|length }})</p>
+    <div class="table-wrap">
+      <table class="ballot-table">
+        <thead><tr><th>Name</th><th>Email</th><th>PIN</th><th>Reason</th></tr></thead>
+        <tbody>
+          {% for u in rejected %}
+            <tr><td>{{ u.name }}</td><td>{{ u.email }}</td><td class="mono">{{ u.pin }}</td><td>{{ u.rejection_reason }}</td></tr>
+          {% else %}
+            <tr><td colspan="4"><div class="empty-state">No rejected requests.</div></td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+{% endblock %}

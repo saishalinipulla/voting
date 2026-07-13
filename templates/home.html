@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Home · Online Voting System{% endblock %}
+{% block content %}
+<div class="hero">
+  <div class="hero-badge">Free · Fair · Verified</div>
+  <h1 class="hero-title">Welcome to the<br><span>Online Voting System</span></h1>
+  <p class="hero-sub">
+    A secure place to register, get verified, and cast your vote for
+    Leaders and Class Representatives (CRs).
+  </p>
+
+  <div class="hero-actions">
+    <a href="{{ url_for('login') }}" class="btn btn-primary btn-lg">Log In</a>
+    <a href="{{ url_for('signup') }}" class="btn btn-outline btn-lg">Sign Up (New Voter)</a>
+  </div>
+
+  <div class="hero-links">
+    <a href="{{ url_for('results') }}">View Live Results →</a>
+    <a href="{{ url_for('admin_login') }}">Admin / Election Officer Login →</a>
+  </div>
+</div>
+
+<div class="steps-grid">
+  <div class="step-card">
+    <div class="step-num">1</div>
+    <h3>Sign Up &amp; Verify</h3>
+    <p>Create your account and verify with the OTP sent on your first sign-in.</p>
+  </div>
+  <div class="step-card">
+    <div class="step-num">2</div>
+    <h3>Get Approved</h3>
+    <p>An admin reviews your request. You'll be notified once accepted or rejected.</p>
+  </div>
+  <div class="step-card">
+    <div class="step-num">3</div>
+    <h3>Cast Your Vote</h3>
+    <p>Vote once, only during the officially declared voting window.</p>
+  </div>
+  <div class="step-card">
+    <div class="step-num">4</div>
+    <h3>See Results</h3>
+    <p>Watch live tallies and find out who wins as Leader or CR.</p>
+  </div>
+</div>
+{% endblock %}

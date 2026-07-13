@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Admin Login · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card admin-card">
+    <p class="eyebrow">Restricted Area</p>
+    <h1 class="card-title">Admin Login</h1>
+    <p class="card-desc">Reserved for authorised election officers only.</p>
+
+    <form method="POST" action="{{ url_for('admin_login') }}">
+      <div class="field">
+        <label for="username">Admin Username</label>
+        <input id="username" name="username" required />
+      </div>
+      <div class="field">
+        <label for="password">Password</label>
+        <input id="password" name="password" type="password" required />
+      </div>
+      <button type="submit" class="btn btn-admin btn-block">Log In</button>
+    </form>
+
+    <div class="hint" style="margin-top:16px;text-align:center;">
+      Default demo credentials: <strong>admin</strong> / <strong>admin123</strong><br>
+      (change these via environment variables before deploying)
+    </div>
+    <p class="fine-links"><a href="{{ url_for('home') }}">&larr; Back to home</a></p>
+  </div>
+</div>
+{% endblock %}

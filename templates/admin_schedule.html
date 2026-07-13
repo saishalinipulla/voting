@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Voting Schedule · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card admin-card">
+    <p class="eyebrow">Voting Window</p>
+    <h1 class="card-title">Set Voting Date &amp; Time</h1>
+    <p class="card-desc">Voters can only cast a ballot between these two times.</p>
+
+    <form method="POST" action="{{ url_for('admin_schedule') }}">
+      <div class="field">
+        <label>Voting Opens</label>
+        <input type="datetime-local" name="start_datetime"
+               value="{{ cfg.start_datetime.strftime('%Y-%m-%dT%H:%M') if cfg.start_datetime else '' }}" required />
+      </div>
+      <div class="field">
+        <label>Voting Closes</label>
+        <input type="datetime-local" name="end_datetime"
+               value="{{ cfg.end_datetime.strftime('%Y-%m-%dT%H:%M') if cfg.end_datetime else '' }}" required />
+      </div>
+      <button type="submit" class="btn btn-admin btn-block">Save Schedule</button>
+    </form>
+
+    <p style="margin-top:16px;">
+      Current status: <span class="status-pill status-{{ cfg.status() }}">{{ cfg.status() }}</span>
+    </p>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card wide">
+    <p class="eyebrow">Welcome, {{ user.name }}</p>
+    <h1 class="card-title">Your Voter Dashboard</h1>
+
+    <div class="status-banner status-{{ user.status }}">
+      {% if user.status == 'pending' %}
+        ⏳ Your registration is <strong>pending admin approval</strong>. You'll be notified here once reviewed.
+      {% elif user.status == 'approved' %}
+        ✅ You're <strong>approved</strong> to vote. Election status:
+        <span class="status-pill status-{{ election_status }}">{{ election_status }}</span>
+      {% elif user.status == 'rejected' %}
+        ❌ Your registration was <strong>rejected</strong>.
+        {% if user.rejection_reason %}Reason: {{ user.rejection_reason }}{% endif %}
+      {% endif %}
+    </div>
+
+    {% if notifications %}
+    <div class="notif-list">
+      <p class="eyebrow" style="margin-top:24px;">Notifications</p>
+      {% for n in notifications %}
+        <div class="notif-item notif-{{ n.kind }}">{{ n.message }}</div>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if user.status == 'approved' %}
+      {% if user.has_voted %}
+        <a href="{{ url_for('thank_you') }}" class="btn btn-secondary btn-block" style="margin-top:24px;">View My Vote Confirmation</a>
+      {% elif election_status == 'open' %}
+        <a href="{{ url_for('vote') }}" class="btn btn-primary btn-block" style="margin-top:24px;">Go to Ballot →</a>
+      {% else %}
+        <div class="alert alert-info" style="margin-top:24px;">
+          {% if election_status == 'upcoming' %}Voting hasn't opened yet. Check back once the admin opens the polls.{% endif %}
+          {% if election_status == 'closed' %}Voting has closed for this election.{% endif %}
+          {% if election_status == 'unset' %}The admin hasn't scheduled the voting window yet.{% endif %}
+        </div>
+      {% endif %}
+    {% endif %}
+
+    <p class="fine-links" style="margin-top:20px;"><a href="{{ url_for('results') }}">View live results →</a></p>
+  </div>
+</div>
+{% endblock %}

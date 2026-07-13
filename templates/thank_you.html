@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Vote Submitted · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card" style="text-align:center;">
+    <div class="big-emoji">🎉</div>
+    <p class="eyebrow">Thank you, {{ user.name }}</p>
+    <h1 class="card-title">Vote Successfully Cast!</h1>
+    <p class="card-desc">
+      Your vote has been submitted and recorded. Each voter may only vote once,
+      so this ballot is now locked to your account.
+    </p>
+    <a href="{{ url_for('results') }}" class="btn btn-primary btn-block">View Live Results</a>
+    <a href="{{ url_for('logout') }}" class="btn btn-outline btn-block" style="margin-top:10px;">Log Out</a>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Online Voting System{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <header class="topnav">
+    <a href="{{ url_for('home') }}" class="brand">
+      <span class="brand-seal">🗳️</span>
+      <span class="brand-text">Online Voting System</span>
+    </a>
+    <nav class="nav-links">
+      <a href="{{ url_for('results') }}">Results</a>
+      {% if session.get('role') == 'voter' %}
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="nav-pill">Log Out</a>
+      {% elif session.get('role') == 'admin' %}
+        <a href="{{ url_for('admin_dashboard') }}">Admin Home</a>
+        <a href="{{ url_for('admin_users') }}">Voter Requests</a>
+        <a href="{{ url_for('admin_candidates') }}">Candidates</a>
+        <a href="{{ url_for('admin_schedule') }}">Schedule</a>
+        <a href="{{ url_for('admin_logout') }}" class="nav-pill">Log Out</a>
+      {% else %}
+        <a href="{{ url_for('login') }}">Login</a>
+        <a href="{{ url_for('signup') }}" class="nav-pill">Sign Up</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  {% if ticker_status in ['upcoming', 'open'] and ticker_cfg.start_datetime %}
+  <div class="ticker-wrap ticker-{{ ticker_status }}">
+    <div class="ticker-track">
+      <span class="ticker-item">
+        🗳️ {% if ticker_status == 'open' %}Voting is OPEN now!{% else %}Voting opens{% endif %}
+        {{ ticker_cfg.start_datetime.strftime('%B %d, %Y at %I:%M %p') }}
+        &nbsp;·&nbsp; Closes {{ ticker_cfg.end_datetime.strftime('%B %d, %Y at %I:%M %p') }}
+        &nbsp;·&nbsp; Cast your vote before the window closes!
+      </span>
+      <span class="ticker-item" aria-hidden="true">
+        🗳️ {% if ticker_status == 'open' %}Voting is OPEN now!{% else %}Voting opens{% endif %}
+        {{ ticker_cfg.start_datetime.strftime('%B %d, %Y at %I:%M %p') }}
+        &nbsp;·&nbsp; Closes {{ ticker_cfg.end_datetime.strftime('%B %d, %Y at %I:%M %p') }}
+        &nbsp;·&nbsp; Cast your vote before the window closes!
+      </span>
+    </div>
+  </div>
+  {% endif %}
+
+  <main class="shell">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash-stack">
+          {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="site-footer">
+    Built with Flask · Online Voting System &copy; {{ 2026 }}
+  </footer>
+</body>
+</html>

@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Cast Your Vote · Online Voting System{% endblock %}
+{% block content %}
+<div class="card-center">
+  <div class="card wide">
+    <p class="eyebrow">Official Ballot</p>
+    <h1 class="card-title">Select One Candidate</h1>
+    <p class="card-desc">You may vote for only one candidate. Your vote is final once submitted.</p>
+
+    {% if status != 'open' %}
+      <div class="alert alert-info">Voting is not currently open.</div>
+    {% endif %}
+
+    <form method="POST" action="{{ url_for('vote') }}">
+      {% for pos in ['Leader', 'CR'] %}
+        {% set pos_candidates = candidates|selectattr('position', 'equalto', pos)|list %}
+        {% if pos_candidates %}
+        <p class="eyebrow" style="margin-top:20px;">{{ pos }} Candidates</p>
+        {% for c in pos_candidates %}
+          <label class="candidate-row">
+            <input type="radio" name="candidate_id" value="{{ c.id }}" required />
+            <span class="candidate-symbol">{{ c.symbol[:2] }}</span>
+            <span class="candidate-info">
+              <span class="candidate-name">{{ c.name }}</span>
+              <span class="candidate-party">{{ c.position }} · {{ c.symbol }}</span>
+            </span>
+            <span class="candidate-check"></span>
+          </label>
+        {% endfor %}
+        {% endif %}
+      {% endfor %}
+
+      {% if not candidates %}
+        <div class="empty-state">No candidates have been registered yet.</div>
+      {% endif %}
+
+      <button type="submit" class="btn btn-primary btn-block" style="margin-top:16px;" {% if status != 'open' or not candidates %}disabled{% endif %}>
+        Submit Vote
+      </button>
+    </form>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll('.candidate-row').forEach(row => {
+    row.addEventListener('click', () => {
+      document.querySelectorAll('.candidate-row').forEach(r => r.classList.remove('selected'));
+      row.classList.add('selected');
+    });
+  });
+</script>
+{% endblock %}
