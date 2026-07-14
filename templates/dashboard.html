@@ -35,7 +35,7 @@
       {% else %}
         <div class="alert alert-info" style="margin-top:24px;">
           {% if election_status == 'upcoming' %}Voting hasn't opened yet. Check back once the admin opens the polls.{% endif %}
-          {% if election_status == 'closed' %}Voting has closed for this election.{% endif %}
+          {% if election_status == 'closed now' %}Voting has closed for this election.{% endif %}
           {% if election_status == 'unset' %}The admin hasn't scheduled the voting window yet.{% endif %}
         </div>
       {% endif %}
