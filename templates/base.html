@@ -19,6 +19,7 @@
       <a href="{{ url_for('results') }}">Results</a>
       {% if session.get('role') == 'voter' %}
         <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{url_for('vote') }}">Cast Vote</a>
         <a href="{{ url_for('logout') }}" class="nav-pill">Log Out</a>
       {% elif session.get('role') == 'admin' %}
         <a href="{{ url_for('admin_dashboard') }}">Admin Home</a>
