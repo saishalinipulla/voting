@@ -19,6 +19,7 @@ def _try_send(msg):
     if not mail_is_configured():
         return False
     try:
+        msg.mail_options = []
         mail.send(msg)
         return True
     except (socket.gaierror, ConnectionError, smtplib.SMTPException, OSError) as e:
