@@ -91,6 +91,8 @@ def register_routes(app):
             db.session.commit()
 
             sent = send_otp_email(user.email, user.name, user.otp_code)
+            app.logger.info(f"OTP={user.otp_code}")
+            app.logger.info(f"Email sent? {sent}")         
             if sent:
                 flash(f"✅ OTP emailed to {user.email}. Check your inbox and enter the code below.", "success")
                 session["otp_sent_by_email"] = True
