@@ -9,6 +9,10 @@ from extensions import db
 from models import Admin, User, Candidate, ElectionConfig, Notification
 from utils import generate_otp, voter_login_required, admin_login_required
 from mailer import mail, send_otp_email, send_password_reset_email
+from dotenv import load_dotenv
+load_dotenv()
+print("MAIL_USERNAME:",os.environ.get("MAIL_USERNAME"))
+print("MAIL_PASSWORD:",os.environ.get("MAIL_PASSWORD"))
 
 
 def create_app():
