@@ -1,6 +1,3 @@
-import socket
-import smtplib
-
 from flask import current_app
 from flask_mail import Mail, Message
 
@@ -13,24 +10,26 @@ def mail_is_configured():
         and current_app.config.get("MAIL_PASSWORD")
     )
 
-
 def _try_send(msg):
-    """
-    Send the email.
-    Returns True if successful, otherwise False.
-    """
-
     if not mail_is_configured():
         current_app.logger.warning("Mail is not configured.")
         return False
 
     try:
-        mail.send(msg)
-        current_app.logger.info(f"OTP email sent successfully to {msg.recipients}")
+        with mail.connect() as conn:
+            conn.host.set_debuglevel(1)   # Add this
+            conn.host.timeout = 10
+            conn.send(msg)
+
+        current_app.logger.info("Email sent successfully.")
         return True
 
     except Exception as e:
-        current_app.logger.error(f"Failed to send OTP email: {e}")
+        current_app.logger.exception(e)
+        return False
+
+    except Exception as e:
+        current_app.logger.error(f"Failed to send OTP email: {str(e)}")
         return False
 
 
@@ -46,7 +45,6 @@ def send_otp_email(to_email, name, otp_code):
             f"Thank you."
         ),
     )
-
     return _try_send(msg)
 
 
@@ -60,5 +58,4 @@ def send_password_reset_email(to_email, name, otp_code):
             f"If you did not request this, please ignore this email."
         ),
     )
-
     return _try_send(msg)
