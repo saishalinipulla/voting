@@ -10,7 +10,6 @@ def mail_is_configured():
         and current_app.config.get("MAIL_PASSWORD")
     )
 
-
 def _try_send(msg):
     if not mail_is_configured():
         current_app.logger.warning("Mail is not configured.")
@@ -18,14 +17,16 @@ def _try_send(msg):
 
     try:
         with mail.connect() as conn:
-            # Prevent long hangs
+            conn.host.set_debuglevel(1)   # Add this
             conn.host.timeout = 10
             conn.send(msg)
 
-        current_app.logger.info(
-            f"OTP email sent successfully to {msg.recipients}"
-        )
+        current_app.logger.info("Email sent successfully.")
         return True
+
+    except Exception as e:
+        current_app.logger.exception(e)
+        return False
 
     except Exception as e:
         current_app.logger.error(f"Failed to send OTP email: {str(e)}")
