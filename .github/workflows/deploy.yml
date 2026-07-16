@@ -1,0 +1,52 @@
+name: Deploy to Amazon ECS
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_REGION: ${{ secrets.AWS_REGION }}
+  ECR_REPOSITORY: voting-app
+  ECS_CLUSTER: voting-cluster
+  ECS_SERVICE: voting-app-service-d86dhraa
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build Docker image
+        run: docker build -t voting-app .
+
+      - name: Tag Docker image
+        run: |
+          docker tag voting-app:latest \
+          ${{ steps.login-ecr.outputs.registry }}/voting-app:latest
+
+      - name: Push Docker image
+        run: |
+          docker push \
+          ${{ steps.login-ecr.outputs.registry }}/voting-app:latest
+
+      - name: Force new ECS deployment
+        run: |
+          aws ecs update-service \
+            --cluster voting-cluster \
+            --service voting-app-service-d86dhraa \
+            --force-new-deployment

@@ -1,0 +1,117 @@
+{
+    "taskDefinitionArn": "arn:aws:ecs:us-east-1:570288705989:task-definition/voting-app:1",
+    "containerDefinitions": [
+        {
+            "name": "voting-app",
+            "image": "570288705989.dkr.ecr.us-east-1.amazonaws.com/voting-app:latest",
+            "cpu": 512,
+            "memory": 1024,
+            "portMappings": [
+                {
+                    "containerPort": 5000,
+                    "hostPort": 5000,
+                    "protocol": "tcp",
+                    "name": "voting-app-5000-tcp",
+                    "appProtocol": "http"
+                }
+            ],
+            "essential": true,
+            "environment": [
+                {
+                    "name": "ADMIN PASSNORD",
+                    "value": "Plmner@28MAIL_SERVER=smtp.gmail.com MAIL PORT=587"
+                },
+                {
+                    "name": "SECRET_KEY",
+                    "value": "votingsecretkey2026"
+                },
+                {
+                    "name": "MAIL_USERNAME",
+                    "value": "agrirentalproject13@gmail.com"
+                },
+                {
+                    "name": "ADMIN USERNAME",
+                    "value": "saishalini14"
+                },
+                {
+                    "name": "MAIL PASSMORD",
+                    "value": "eflbsaorvhzxgwvs"
+                },
+                {
+                    "name": "MAIL_DEFAULT_SENDER",
+                    "value": "agrirentalproject13@gmail.com"
+                }
+            ],
+            "environmentFiles": [],
+            "mountPoints": [],
+            "volumesFrom": [],
+            "ulimits": [],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "/ecs/voting-app",
+                    "awslogs-create-group": "true",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-stream-prefix": "ecs"
+                },
+                "secretOptions": []
+            },
+            "systemControls": []
+        }
+    ],
+    "family": "voting-app",
+    "taskRoleArn": "arn:aws:iam::570288705989:role/LabRole",
+    "executionRoleArn": "arn:aws:iam::570288705989:role/LabRole",
+    "networkMode": "awsvpc",
+    "revision": 1,
+    "volumes": [],
+    "status": "ACTIVE",
+    "requiresAttributes": [
+        {
+            "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+        },
+        {
+            "name": "ecs.capability.execution-role-awslogs"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.ecr-auth"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.task-iam-role"
+        },
+        {
+            "name": "ecs.capability.execution-role-ecr-pull"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+        },
+        {
+            "name": "ecs.capability.task-eni"
+        },
+        {
+            "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+        }
+    ],
+    "placementConstraints": [],
+    "compatibilities": [
+        "EC2",
+        "FARGATE",
+        "MANAGED_INSTANCES"
+    ],
+    "runtimePlatform": {
+        "cpuArchitecture": "X86_64",
+        "operatingSystemFamily": "LINUX"
+    },
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "cpu": "1024",
+    "memory": "3072",
+    "registeredAt": "2026-07-15T15:42:58.618Z",
+    "registeredBy": "arn:aws:sts::570288705989:assumed-role/voclabs/user5074132=rohinigorla06@gmail.com",
+    "enableFaultInjection": false,
+    "tags": []
+}
