@@ -309,3 +309,52 @@ flask-voting-system/
 - Consider HTTPS-only cookies and rate-limiting login attempts for production use.
 
 
+---
+
+# AWS Deployment Screenshots
+
+## Application Load Balancer
+
+![ALB](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/alb.png)
+
+---
+
+## Amazon ECR
+
+![ECR](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/ECR.png)
+
+---
+
+## Amazon ECS
+
+![ECS](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/ecs.png)
+
+---
+
+## ECS Deployment
+
+![ECS Deployment](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/ecs-deployments.png)
+
+---
+
+## Target Group
+
+![Target Group](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/Target-group.png)
+
+---
+
+## CloudWatch Logs
+
+![CloudWatch](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/cloudwatch.png)
+
+---
+
+## GitHub Actions CI/CD
+
+![GitHub Actions](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/GitHub%20Actions.png)
+
+---
+
+## Live Website
+
+![Website](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/Website.png)
