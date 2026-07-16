@@ -307,3 +307,5 @@ flask-voting-system/
 - Set a strong, random `SECRET_KEY` via environment variable in production.
 - Wire up a real OTP delivery method (email/SMS) instead of the on-screen demo.
 - Consider HTTPS-only cookies and rate-limiting login attempts for production use.
+
+
