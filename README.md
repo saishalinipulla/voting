@@ -371,3 +371,21 @@ Commands used:
 terraform init
 terraform plan
 terraform apply
+
+Project Overview
+
+Architecture
+
+AWS Services Used
+
+Infrastructure as Code
+
+Monitoring
+
+CI/CD Pipeline
+
+Deployment Steps
+
+Screenshots
+
+Future Improvements
