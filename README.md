@@ -358,3 +358,16 @@ flask-voting-system/
 ## Live Website
 
 ![Website](https://voting-app-sudarshan-2026.s3.us-east-1.amazonaws.com/Website.png)
+
+## Infrastructure as Code
+
+Terraform is used to provision AWS infrastructure.
+
+Terraform resources included:
+- Amazon S3 Bucket
+
+Commands used:
+
+terraform init
+terraform plan
+terraform apply
