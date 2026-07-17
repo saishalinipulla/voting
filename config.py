@@ -40,7 +40,12 @@ class Config:
     MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
     MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
     MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "true").lower() == "true"
+    # Some providers require SSL (typically port 465).
+    MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", "false").lower() == "true"
+
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME")          # e.g. your Gmail address
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")          # Gmail "App Password", not your normal password
     MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", MAIL_USERNAME)
-    MAIL_TIMEOUT = 10
+    # Flask-Mail option: used by Flask-Mail/SMTP when we set conn.host.timeout
+    MAIL_TIMEOUT = int(os.environ.get("MAIL_TIMEOUT", "10"))
+

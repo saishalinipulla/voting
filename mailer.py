@@ -10,27 +10,40 @@ def mail_is_configured():
         and current_app.config.get("MAIL_PASSWORD")
     )
 
+
 def _try_send(msg):
     if not mail_is_configured():
-        current_app.logger.warning("Mail is not configured.")
+        current_app.logger.warning(
+            "Mail is not configured (missing MAIL_USERNAME or MAIL_PASSWORD)."
+        )
         return False
+
+    missing = []
+    if not current_app.config.get("MAIL_DEFAULT_SENDER"):
+        missing.append("MAIL_DEFAULT_SENDER")
+    if not current_app.config.get("MAIL_SERVER"):
+        missing.append("MAIL_SERVER")
+
+    if missing:
+        current_app.logger.warning(f"Mail config missing keys: {', '.join(missing)}")
 
     try:
         with mail.connect() as conn:
-            conn.host.set_debuglevel(1)   # Add this
-            conn.host.timeout = 10
+            # Keep timeouts reasonable for web onboarding.
+            if hasattr(conn, "host") and hasattr(conn.host, "timeout"):
+                conn.host.timeout = current_app.config.get("MAIL_TIMEOUT", 10)
+
             conn.send(msg)
 
         current_app.logger.info("Email sent successfully.")
         return True
-
     except Exception as e:
         current_app.logger.exception(e)
-        return False
-
-    except Exception as e:
         current_app.logger.error(f"Failed to send OTP email: {str(e)}")
         return False
+
+
+
 
 
 def send_otp_email(to_email, name, otp_code):
