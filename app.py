@@ -2,17 +2,19 @@ import os
 from datetime import datetime
 
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-from werkzeug.security import generate_password_hash
+
 
 from config import Config
 from extensions import db
 from models import Admin, User, Candidate, ElectionConfig, Notification
 from utils import generate_otp, voter_login_required, admin_login_required
-from mailer import mail, send_otp_email, send_password_reset_email
+from mailer import send_otp_email, send_password_reset_email
+
 from dotenv import load_dotenv
 load_dotenv()
-print("MAIL_USERNAME:",os.environ.get("MAIL_USERNAME"))
-print("MAIL_PASSWORD:",os.environ.get("MAIL_PASSWORD"))
+
+
+
 
 
 def create_app():
@@ -32,6 +34,7 @@ def create_app():
     return app
 
 
+
 def _seed_admin(app):
     """Creates the default admin account the first time the app runs."""
     if Admin.query.count() == 0:
@@ -47,8 +50,8 @@ def _seed_admin(app):
 
 
 def register_routes(app):
-
     # ---------------------------------------------------------------
+
     # Makes the election schedule available on every page (for the
     # scrolling ticker banner), without needing to pass it in each route.
     # ---------------------------------------------------------------
@@ -96,16 +99,23 @@ def register_routes(app):
 
             sent = send_otp_email(user.email, user.name, user.otp_code)
             app.logger.info(f"OTP={user.otp_code}")
-            app.logger.info(f"Email sent? {sent}")         
+            app.logger.info(f"Email sent? {sent}")
+
+            # Always keep the OTP server-side for verification.
+            # If email delivery fails (common on misconfigured SMTP),
+            # we fall back to showing it in the UI so onboarding never breaks.
             if sent:
                 flash(f"✅ OTP emailed to {user.email}. Check your inbox and enter the code below.", "success")
                 session["otp_sent_by_email"] = True
+                session.pop("demo_otp", None)
             else:
-                # Email not configured or blocked — store OTP in session
-                # so it can be displayed prominently on the verify page.
+
+                # Email not configured/blocked — show OTP on-screen.
                 session["demo_otp"] = user.otp_code
                 session["otp_sent_by_email"] = False
-                flash("OTP generated! Check the code shown below.", "info")
+                flash("⚠️ Email sending failed on this server. OTP is shown on the verification page.", "info")
+
+
 
             session["pending_pin"] = pin
             return redirect(url_for("verify_otp"))
@@ -148,6 +158,7 @@ def register_routes(app):
             user.otp_code = generate_otp()
             db.session.commit()
             sent = send_otp_email(user.email, user.name, user.otp_code)
+
             if sent:
                 flash(f"✅ A new OTP has been emailed to {user.email}.", "success")
                 session["otp_sent_by_email"] = True
@@ -155,8 +166,10 @@ def register_routes(app):
             else:
                 session["demo_otp"] = user.otp_code
                 session["otp_sent_by_email"] = False
-                flash("New OTP generated! Check the code shown below.", "info")
+                flash("⚠️ Email sending failed on this server. New OTP is shown on the verification page.", "info")
+
         return redirect(url_for("verify_otp"))
+
 
     # ---------------------------------------------------------------
     # VOTER: LOGIN / LOGOUT
