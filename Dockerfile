@@ -10,4 +10,6 @@ COPY . .
 
 EXPOSE 5000
 
-CMD ["python", "app.py"]
+# Use gunicorn for fast startup + consistent production behavior.
+CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000", "--workers", "2", "--threads", "4"]
+
